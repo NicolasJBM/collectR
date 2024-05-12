@@ -1,0 +1,37 @@
+Package: collectR
+Title: Toolbox to collect data
+Version: 1.30
+Date: 2023-07-02
+Authors@R: 
+    person(given = "Nicolas",
+           family = "Mangin",
+           role = c("aut", "cre"),
+           email = "nicolas.jb.mangin@gmail.com",
+           comment = c(ORCID = "0000-0002-1597-9376"))
+Description: Functions and interfaces to facilitate the collection of data for investigation or education purposes.
+Encoding: UTF-8
+License: GPL-3 | file LICENSE
+Depends: R (>= 3.6)
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.1
+Imports:
+    dplyr,
+    anytime,
+    httr,
+    lubridate,
+    purrr,
+    quantmod,
+    rdbnomics,
+    robotstxt,
+    rvest,
+    stringr,
+    tibble,
+    tidyr,
+    urltools,
+    broom,
+    furrr,
+    future,
+    writexl,
+    acanva
+
+
