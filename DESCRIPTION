@@ -1,7 +1,7 @@
 Package: collectR
 Title: Toolbox to collect data
-Version: 1.30
-Date: 2023-07-02
+Version: 1.00
+Date: 2024-05-13
 Authors@R: 
     person(given = "Nicolas",
            family = "Mangin",
@@ -32,6 +32,8 @@ Imports:
     furrr,
     future,
     writexl,
+    XML,
+    jsonlite,
+    xml2,
     acanva
-
 
