@@ -150,7 +150,15 @@ compute_cost_of_capital <- function(tickers = NA, market = '^GSPC'){
     tidyr::pivot_longer(cols = c("beta","Rf","MR","MP","Ke"), names_to = "id", values_to = "value") |>
     dplyr::mutate(value = base::round(value, 4)) |>
     dplyr::select(cik, id, date, value) |>
-    dplyr::arrange(cik, date)
+    dplyr::arrange(cik, date) |>
+    dplyr::mutate(id = dplyr::case_when(
+      id == "beta" ~ "beta^i",
+      "Rf" ~ "R_f",
+      "MR" ~ "R^m",
+      "MP" ~ "P^m",
+      "Ke" ~ "K_e^i",
+      TRUE ~ ""
+    ))
 
   return(cost_of_capital)
 }
