@@ -205,6 +205,12 @@ classify_fs_labels <- function(label, section){
     )
   } else if (section == "OCF") {
     id <- "OCF"
+  } else if (section == "ADDINFO"){
+    id <- dplyr::case_when(
+      stringr::str_detect(base::tolower(label), "(?=.*interest )(?=.*[pay|pai])") ~ "PAIDINT",
+      stringr::str_detect(base::tolower(label), "(?=.*tax )(?=.*[pay|pai])") ~ "PAIDTAX",
+      TRUE ~ ""
+    )
   }
   return(id)
 }
