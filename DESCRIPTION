@@ -14,6 +14,7 @@ License: GPL-3 | file LICENSE
 Depends: R (>= 3.6)
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1
+LazyData: true
 Imports:
     dplyr,
     anytime,
