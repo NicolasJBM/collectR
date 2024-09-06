@@ -35,6 +35,5 @@ Imports:
     writexl,
     XML,
     jsonlite,
-    xml2,
-    acanva
+    xml2
 
