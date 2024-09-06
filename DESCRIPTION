@@ -35,5 +35,6 @@ Imports:
     writexl,
     XML,
     jsonlite,
-    xml2
+    xml2,
+    FinCal
 

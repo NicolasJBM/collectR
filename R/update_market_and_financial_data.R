@@ -5,7 +5,6 @@
 #' @param type Character. Whether the function should create a "market" or "financial" dataset.
 #' @param path Character. Path to the folder where the dataset should be saved.
 #' @return Excel files to be added to databases
-#' @import acanva
 #' @importFrom dplyr mutate
 #' @importFrom dplyr select
 #' @importFrom furrr future_map
@@ -31,8 +30,8 @@ update_market_and_financial_data <- function(type = "market", path = NA){
       path <- base::paste0(path, "/financial_data.xlsx")
     } else path <- "financial_data.xlsx"
     future::plan("multisession")
-    financial_data <- tibble::tibble(cik = base::unique(acanva::statements$cik)) |>
-      dplyr::mutate(data = furrr::future_map(cik, acanva::compute_financial_data)) |>
+    financial_data <- tibble::tibble(cik = base::unique(collectR::statements$cik)) |>
+      dplyr::mutate(data = furrr::future_map(cik, collectR::compute_financial_data)) |>
       dplyr::select(-cik) |>
       tidyr::unnest(data)
     writexl::write_xlsx(financial_data, path = path)

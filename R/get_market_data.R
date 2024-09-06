@@ -38,7 +38,7 @@ get_market_data <- function(filings){
     dplyr::ungroup() |>
     dplyr::select(cik, mindate, maxdate) |>
     base::unique() |>
-    dplyr::left_join(acanva::corporations, by = "cik") |>
+    dplyr::left_join(collectR::corporations, by = "cik") |>
     dplyr::select(cik, ticker, mindate, maxdate) |>
     base::unique()
 

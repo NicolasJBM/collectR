@@ -47,14 +47,14 @@ compute_cost_of_capital <- function(tickers = NA, market = '^GSPC'){
   variation <- NULL
 
   if (base::is.na(tickers)){
-    tickers <- base::unique(acanva::corporations$ticker)
+    tickers <- base::unique(collectR::corporations$ticker)
   }
 
-  corporations <- dplyr::select(acanva::corporations, cik, ticker) |>
+  corporations <- dplyr::select(collectR::corporations, cik, ticker) |>
     dplyr::group_by(cik) |> dplyr::sample_n(1) |> dplyr::ungroup() |>
     base::unique()
 
-  companies <- acanva::statements |>
+  companies <- collectR::statements |>
     dplyr::select(cik, date) |>
     base::unique() |>
     dplyr::left_join(corporations, by = "cik") |>
@@ -132,7 +132,7 @@ compute_cost_of_capital <- function(tickers = NA, market = '^GSPC'){
         dplyr::filter(ticker == market) |>
         dplyr::filter(date == base::min(date) | date == base::max(date)) |>
         dplyr::arrange(date)
-      acanva::RATE(
+      collectR::RATE(
         NPER = 5,
         PMT = 0,
         PV = -market_growth$adjusted_price[1],
