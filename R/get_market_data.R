@@ -1,7 +1,9 @@
 #' @name get_market_data
 #' @title Get data about stock price and dividends
 #' @author Nicolas Mangin
-#' @param filings Tibble. Cik codes and date.
+#' @param cik Character. cik code of the company
+#' @param ticker Character. Ticker of the company.
+#' @param from Character. IDO code for the first date.
 #' @description Get data about stock price and dividends
 #' @return Table with cik, date, adjusted_price and dividend.
 #' @importFrom dplyr full_join
@@ -21,79 +23,53 @@
 #' @export
 
 
-get_market_data <- function(filings){
+get_market_data <- function(cik = NA, ticker = NA, from = NA){
 
+  base::stopifnot(
+    !base::is.na(cik),
+    !base::is.na(ticker),
+    !base::is.na(from)
+  )
+  
+  base::Sys.sleep(2)
+  base::print(base::paste0(ticker, " - ", cik))
+  
   adjusted_price <- NULL
-  cik <- NULL
   data <- NULL
   dividend <- NULL
-  ticker <- NULL
   
-  companies <- filings |>
-    dplyr::group_by(cik) |>
-    dplyr::mutate(
-      mindate = base::min(date),
-      maxdate = base::max(date),
-    ) |>
-    dplyr::ungroup() |>
-    dplyr::select(cik, mindate, maxdate) |>
-    base::unique() |>
-    dplyr::left_join(collectR::corporations, by = "cik") |>
-    dplyr::select(cik, ticker, mindate, maxdate) |>
-    base::unique()
-
-  mindate <- base::min(companies$mindate)
-  maxdate <- base::max(companies$maxdate)
-
-  daily_financial_data <- tibble::tibble(
-    ticker = companies$ticker
+  daily_financial_data <- quantmod::getSymbols(
+    ticker,
+    from = from,
+    periodicity = 'daily',
+    src='yahoo',
+    auto.assign = FALSE
   ) |>
-    dplyr::mutate(
-      data = purrr::map(ticker, function(x, from, to){
-        quantmod::getSymbols(
-          x,
-          from = from, to = to, periodicity = 'daily',
-          src='yahoo', auto.assign=FALSE
-        )
-      },
-      from = mindate, to = maxdate)
-    ) |>
-    dplyr::mutate(data = purrr::map(data, function(x) {
-      y <- x[,6] |>
-        base::as.data.frame() |>
-        tibble::rownames_to_column("date") |>
-        dplyr::mutate(date = lubridate::as_date(date))
-      base::names(y) <- c("date","adjusted_price")
-      y
-    })) |>
-    tidyr::unnest(data)
+    base::as.data.frame() |>
+    tibble::rownames_to_column("date") |>
+    dplyr::mutate(date = lubridate::as_date(date)) |>
+    dplyr::select(date, dplyr::ends_with("Adjusted"))
+  base::names(daily_financial_data) <- c("date","adjusted_price")
 
-  dividends <- companies |>
-    dplyr::select(ticker) |>
-    dplyr::mutate(
-      data = purrr::map(ticker, function(ticker, from, to){
-        div <- quantmod::getDividends(
-          ticker,
-          from = from,
-          to = to,
-          src = "yahoo",
-          auto.assign = TRUE,
-          auto.update = TRUE,
-          verbose = FALSE
-        ) |>
-          base::as.data.frame() |>
-          tibble::rownames_to_column("date")
-        base::names(div) <- c("date","dividend")
-        div
-      }, from = mindate, to = maxdate)
-    ) |>
-    tidyr::unnest(data)
+  dividends <- quantmod::getDividends(
+    ticker,
+    from = from,
+    src = "yahoo",
+    auto.assign = FALSE,
+    auto.update = TRUE,
+    verbose = FALSE
+  ) |>
+    base::as.data.frame() |>
+    tibble::rownames_to_column("date")
+  base::names(dividends) <- c("date","dividend")
 
   market_data <- daily_financial_data |>
-    dplyr::mutate(date = base::as.character(date)) |>
-    dplyr::full_join(dividends, by = c("ticker","date")) |>
+    dplyr::mutate(
+      cik = cik,
+      date = base::as.character(date)
+    ) |>
+    dplyr::full_join(dividends, by = c("date")) |>
     tidyr::replace_na(base::list(dividend = 0)) |>
-    dplyr::left_join(dplyr::select(companies, ticker, cik), by = "ticker") |>
     dplyr::select(cik, date, adjusted_price, dividend)
   
   return(market_data)

@@ -1,6 +1,6 @@
 #' @name statements
 #' @title statements
-#' @format A data frame with 19727 rows and 6 variables
+#' @format A data frame with 45067 rows and 6 variables
 #' \itemize{
 #'   \item  cik   character
 #'   \item  date   character

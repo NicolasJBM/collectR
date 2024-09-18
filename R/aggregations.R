@@ -1,6 +1,6 @@
 #' @name aggregations
 #' @title aggregations
-#' @format A data frame with 148 rows and 59 variables
+#' @format A data frame with 147 rows and 59 variables
 #' \itemize{
 #'   \item  id   character
 #'   \item  TA   character
@@ -46,21 +46,21 @@
 #'   \item  EBT   character
 #'   \item  TAX   character
 #'   \item  NI   character
-#'   \item  CFOA   character
 #'   \item  CFOA.NI   character
 #'   \item  CFOA.RECON   character
 #'   \item  CFOA.OP   character
 #'   \item  TCFOA   character
-#'   \item  CFIA   character
 #'   \item  CFIA.OP   character
 #'   \item  CFIA.INV   character
 #'   \item  TCFIA   character
-#'   \item  CFFA   character
 #'   \item  CFFA.DBT   character
 #'   \item  CFFA.EQT   character
 #'   \item  TCFFA   character
 #'   \item  OACF   character
 #'   \item  CASHVAR   character
+#'   \item  PAIDINT   character
+#'   \item  PAIDTAX   character
+#'   \item  CFOA.DEPR   character
 #' }
 #' @docType data
 #' @keywords datasets

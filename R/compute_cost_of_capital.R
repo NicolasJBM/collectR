@@ -30,6 +30,8 @@
 
 compute_cost_of_capital <- function(tickers = NA, market = '^GSPC'){
 
+  base::stopifnot(base::length(tickers) > 1)
+  
   MP <- NULL
   MR <- NULL
   Rf <- NULL
@@ -45,10 +47,6 @@ compute_cost_of_capital <- function(tickers = NA, market = '^GSPC'){
   ticker <- NULL
   value <- NULL
   variation <- NULL
-
-  if (base::is.na(tickers)){
-    tickers <- base::unique(collectR::corporations$ticker)
-  }
 
   corporations <- dplyr::select(collectR::corporations, cik, ticker) |>
     dplyr::group_by(cik) |> dplyr::sample_n(1) |> dplyr::ungroup() |>
@@ -153,10 +151,10 @@ compute_cost_of_capital <- function(tickers = NA, market = '^GSPC'){
     dplyr::arrange(cik, date) |>
     dplyr::mutate(id = dplyr::case_when(
       id == "beta" ~ "beta^i",
-      "Rf" ~ "R_f",
-      "MR" ~ "R^m",
-      "MP" ~ "P^m",
-      "Ke" ~ "K_e^i",
+      id == "Rf" ~ "R_f",
+      id == "MR" ~ "R^m",
+      id == "MP" ~ "P^m",
+      id == "Ke" ~ "K_e^i",
       TRUE ~ ""
     ))
 

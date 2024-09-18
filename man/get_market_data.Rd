@@ -4,10 +4,14 @@
 \alias{get_market_data}
 \title{Get data about stock price and dividends}
 \usage{
-get_market_data(filings)
+get_market_data(cik = NA, ticker = NA, from = NA)
 }
 \arguments{
-\item{filings}{Tibble. Cik codes and date.}
+\item{cik}{Character. cik code of the company}
+
+\item{ticker}{Character. Ticker of the company.}
+
+\item{from}{Character. IDO code for the first date.}
 }
 \value{
 Table with cik, date, adjusted_price and dividend.
