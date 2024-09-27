@@ -35,6 +35,20 @@ correct_interest <- function(x){
       )
     }
     
+  } else if (base::all("PAIDINT" %in% x$id, base::nrow(x) == 1)){
+    
+    y <- x$amount
+    base::names(y) <- x$id
+    
+    difference <- y["PAIDINT"]
+    FINGAIN <- difference
+    INT = -difference
+    z <- tibble::tibble(
+      id = c("FINGAIN","INT"),
+      label  = c("Financial gains (losses) and interest income", "Interest expense"),
+      amount = c(FINGAIN, INT)
+    )
+    
   } else {
     z <- tibble::tibble(
       id = c("FINGAIN","INT"),
@@ -43,4 +57,5 @@ correct_interest <- function(x){
     )
   }
   
+  return(z)
 }
