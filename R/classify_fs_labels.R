@@ -18,7 +18,6 @@ classify_fs_labels <- function(label, section){
       stringr::str_detect(base::tolower(label), "cash") ~ "CASH",
       stringr::str_detect(base::tolower(label), "tax") ~ "CDT",
       stringr::str_detect(base::tolower(label), "(?=.*account)(?=.*receiv)") ~ "AR",
-      stringr::str_detect(base::tolower(label), "invest|market|treasur|note|financ|discontin") ~ "CIA",
       stringr::str_detect(base::tolower(label), "for sale") ~ "CIA",
       stringr::str_detect(base::tolower(label), "non-trade") ~ "CIA",
       stringr::str_detect(base::tolower(label), "material|leaf") ~ "RM",
@@ -30,6 +29,7 @@ classify_fs_labels <- function(label, section){
       stringr::str_detect(base::tolower(label), "inventor") ~ "INV",
       stringr::str_detect(base::tolower(label), "prepaid|defer|advance") ~ "PDE",
       stringr::str_detect(base::tolower(label), "customer|receivable") ~ "AR",
+      stringr::str_detect(base::tolower(label), "invest|market|treasur|note|financ|discontin") ~ "CIA",
       stringr::str_detect(base::tolower(label), "other") ~ "COA",
       TRUE ~ "COA"
     )
@@ -76,13 +76,13 @@ classify_fs_labels <- function(label, section){
       stringr::str_detect(base::tolower(label), "(?=.*commercial)(?=.*paper)") ~ "STD",
       stringr::str_detect(base::tolower(label), "(?=.*credit)(?=.*facility)") ~ "STD",
       stringr::str_detect(base::tolower(label), "debt") ~ "STD",
+      stringr::str_detect(base::tolower(label), "payable") ~ "AP",
       stringr::str_detect(base::tolower(label), "liabil|warrant|accrued|expense|cost") ~ "OAL",
       stringr::str_detect(base::tolower(label), "advance|sale") ~ "UDR",
       stringr::str_detect(base::tolower(label), "borrow") ~ "CFL",
       stringr::str_detect(base::tolower(label), "financial") ~ "CFL",
       stringr::str_detect(base::tolower(label), "credit") ~ "CFL",
       stringr::str_detect(base::tolower(label), "controllling") ~ "CFL",
-      stringr::str_detect(base::tolower(label), "payable") ~ "COL",
       stringr::str_detect(base::tolower(label), "loyalty") ~ "COL",
       stringr::str_detect(base::tolower(label), "deferred") ~ "COL",
       stringr::str_detect(base::tolower(label), "accrued") ~ "COL",
@@ -188,6 +188,7 @@ classify_fs_labels <- function(label, section){
   } else if (section == "CFOA") {
     id <- dplyr::case_when(
       stringr::str_detect(base::tolower(label), "net income") ~ "NI.CFS",
+      stringr::str_detect(base::tolower(label), "profit") ~ "NI.CFS",
       stringr::str_detect(base::tolower(label), "net earning") ~ "NI.CFS",
       stringr::str_detect(base::tolower(label), "^net loss$") ~ "NI.CFS",
       stringr::str_detect(base::tolower(label), "^net (loss)/earnings$") ~ "NI.CFS",
