@@ -187,11 +187,13 @@ classify_fs_labels <- function(label, section){
     id <- "TAX"
   } else if (section == "CFOA") {
     id <- dplyr::case_when(
-      stringr::str_detect(base::tolower(label), "net income") ~ "NI.CFS",
+      stringr::str_detect(base::tolower(label), "(?=.*(gain|loss))(?=.*(invest|dispos|sale|impair|divest|discontin|propert|asset|other))") ~ "CNCL.NOGL",
+      stringr::str_detect(base::tolower(label), "(?=.*(gain|loss))(?=.*(debt|financ|equity|credit|foreign|currency|deriv|secur|warrant))") ~ "CNCL.NOGL",
+      stringr::str_detect(base::tolower(label), "(?=.*(gain|loss))(?=.*(subsid|unreal|cumul|pension|impair|consolid|franchis|transac))") ~ "CNCL.NOGL",
+      stringr::str_detect(base::tolower(label), "(?=.*net)(?=.*income)") ~ "NI.CFS",
       stringr::str_detect(base::tolower(label), "profit") ~ "NI.CFS",
       stringr::str_detect(base::tolower(label), "net earning") ~ "NI.CFS",
-      stringr::str_detect(base::tolower(label), "^net loss$") ~ "NI.CFS",
-      stringr::str_detect(base::tolower(label), "^net (loss)/earnings$") ~ "NI.CFS",
+      stringr::str_detect(base::tolower(label), "(?=.*net)(?=.*loss)") ~ "NI.CFS",
       stringr::str_detect(base::tolower(label), "(?=.*defer)(?=.*revenue)") ~ "CHG.UDR",
       stringr::str_detect(base::tolower(label), "unearn") ~ "CHG.UDR",
       stringr::str_detect(base::tolower(label), "uncollect") ~ "CHG.AR",
@@ -216,7 +218,8 @@ classify_fs_labels <- function(label, section){
       stringr::str_detect(base::tolower(label), "accrued") ~ "CHG.OAL",
       stringr::str_detect(base::tolower(label), "leas") ~ "CHG.OLL",
       stringr::str_detect(base::tolower(label), "(?=.*long)(?=.*term)(?=.*liab)") ~ "CHG.NCOL",
-      stringr::str_detect(base::tolower(label), "liabil|expense|charge|employe|pension|retire|") ~ "CHG.COL",
+      stringr::str_detect(base::tolower(label), "liabil|expense|charge|pension|retire|") ~ "CHG.COL",
+      stringr::str_detect(base::tolower(label), "stock") ~ "CNCL.NOGL",
       TRUE ~ "RECON_NICFO"
     )
   } else if (section == "CFIA") {
