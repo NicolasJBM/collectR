@@ -141,8 +141,10 @@ classify_fs_labels <- function(label, section){
     )
   } else if (section == "SE") {
     id <- dplyr::case_when(
+      stringr::str_detect(base::tolower(label), "^prefer") ~ "PRFSTK",
+      stringr::str_detect(base::tolower(label), "^common") ~ "COMSTK",
       stringr::str_detect(base::tolower(label), "treasur") ~ "TRSTK",
-      stringr::str_detect(base::tolower(label), "(?=.*repurch)(?=.*stock)") ~ "RE",
+      stringr::str_detect(base::tolower(label), "(?=.*repurch)(?=.*stock)") ~ "TRSTK",
       stringr::str_detect(base::tolower(label), "(?=.*other)(?=.*comprehensive)") ~ "OCIL",
       stringr::str_detect(base::tolower(label), "(?=.*earning)(?=.*retain)") ~ "RE",
       stringr::str_detect(base::tolower(label), "(?=.*earning)(?=.*employ)") ~ "RE",
