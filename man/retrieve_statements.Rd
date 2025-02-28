@@ -4,15 +4,21 @@
 \alias{retrieve_statements}
 \title{Retrieve statements}
 \usage{
-retrieve_statements(tables, positions)
+retrieve_statements(tables, positions, forcebs, forceis, forcecfs)
 }
 \arguments{
 \item{tables}{List. all tables from a 10-K annual report.}
 
-\item{positions}{List. Position of the tables containing financial statements}
+\item{positions}{List. Position of the tables containing financial statements,}
+
+\item{forcebs}{Character vector. List of tables ids for balance sheet.}
+
+\item{forceis}{Character vector. List of tables ids for income statement.}
+
+\item{forcecfs}{Character vector. List of tables ids for cash flow statement.}
 }
 \value{
-List of formated financial statements.
+List of formatted financial statements.
 }
 \description{
 Retrieve and format tables selected as financial statements.

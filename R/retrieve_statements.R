@@ -3,8 +3,11 @@
 #' @author Nicolas Mangin
 #' @description Retrieve and format tables selected as financial statements.
 #' @param tables List. all tables from a 10-K annual report.
-#' @param positions List. Position of the tables containing financial statements
-#' @return List of formated financial statements.
+#' @param positions List. Position of the tables containing financial statements,
+#' @param forcebs Character vector. List of tables ids for balance sheet.
+#' @param forceis Character vector. List of tables ids for income statement.
+#' @param forcecfs Character vector. List of tables ids for cash flow statement.
+#' @return List of formatted financial statements.
 #' @importFrom dplyr bind_rows
 #' @importFrom dplyr everything
 #' @importFrom dplyr filter
@@ -15,7 +18,10 @@
 #' @export
 
 
-retrieve_statements <- function(tables, positions){
+retrieve_statements <- function(
+    tables, positions,
+    forcebs, forceis, forcecfs
+  ){
   
   V1 <- NULL
   statement <- NULL
@@ -26,9 +32,15 @@ retrieve_statements <- function(tables, positions){
   position_cash <- positions[[4]][1]
   
   
+  
   safe_format_statement <- purrr::safely(collectR::format_statement)
   
-  if (position_rights != "" & position_duties != ""){
+  if (forcebs != "") {
+    
+    forcebs <- stringr::str_split(forcebs, pattern = " ", simplify = TRUE) 
+    
+    
+  } else if (position_rights != "" & position_duties != ""){
     if (position_rights == position_duties){
       balancesheet <- tables[[position_rights]] |>
         dplyr::mutate_all(function(x) base::trimws(base::gsub("[$]","",x)))
@@ -85,7 +97,11 @@ retrieve_statements <- function(tables, positions){
     
   } else balancesheet <- NA
   
-  if (position_income != ""){
+  if (forceis != "") {
+    
+    forceis <- stringr::str_split(forceis, pattern = " ", simplify = TRUE) 
+    
+  } else if (position_income != ""){
     income <- tables[[position_income]] |>
       dplyr::mutate_all(function(x) base::trimws(base::gsub("[$]","",x)))
     contain_info <- base::apply(income, 2, collectR::detect_info_in_col)
@@ -107,7 +123,40 @@ retrieve_statements <- function(tables, positions){
     } else income <- NA
   }
   
-  if (position_cash != ""){
+  if (forcecfs != "") {
+    
+    forcecfs <- stringr::str_split(forcecfs, pattern = " ", simplify = TRUE) 
+    
+    cash <- tables[[forcecfs[1]]]
+    if (base::length(forcecfs) > 1) {
+      for (i in 2:(base::length(forcecfs))){
+        cash <- dplyr::bind_rows(cash,  tables[[forcecfs[i]]])
+      }
+    }
+    cash <- cash |>
+      dplyr::mutate_all(function(x) base::trimws(base::gsub("[$]","",x)))
+    contain_info <- base::apply(cash, 2, collectR::detect_info_in_col)
+    if (base::sum(contain_info) > 2){
+      cash <- cash[, base::as.logical(contain_info)] |>
+        dplyr::mutate(statement = "CFS")
+      cash <- cash |>
+        dplyr::filter(V1 != "") |>
+        dplyr::select(statement, account = V1, dplyr::everything()) |>
+        safe_format_statement()
+      
+      if (!base::is.null(cash$result)){
+        cash <- cash$result
+      } else {
+        cash <- NA
+      }
+      
+    } else cash <- NA
+    
+    
+    
+    
+    
+  } else if (position_cash != ""){
     cash <- tables[[position_cash]] |>
       dplyr::mutate_all(function(x) base::trimws(base::gsub("[$]","",x)))
     contain_info <- base::apply(cash, 2, collectR::detect_info_in_col)

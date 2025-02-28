@@ -31,7 +31,7 @@ classify_fs_labels <- function(label, section){
       stringr::str_detect(base::tolower(label), "customer|receivable") ~ "AR",
       stringr::str_detect(base::tolower(label), "invest|market|treasur|note|financ|discontin") ~ "CIA",
       stringr::str_detect(base::tolower(label), "other") ~ "COA",
-      TRUE ~ "COA"
+      TRUE ~ "OCOA"
     )
   } else if (section == "NCA") {
     id <- dplyr::case_when(
@@ -44,9 +44,9 @@ classify_fs_labels <- function(label, section){
       stringr::str_detect(base::tolower(label), "propert|plant|equip|vehicle|facilities|building|system|construct|furtniture|fixture") ~ "PPE",
       stringr::str_detect(base::tolower(label), "invest|equity|market|financ|note|discontin|loan") ~ "NCIA",
       stringr::str_detect(base::tolower(label), "for sale") ~ "NCIA",
-      stringr::str_detect(base::tolower(label), "other") ~ "NCOA",
+      stringr::str_detect(base::tolower(label), "other") ~ "ONCOA",
       stringr::str_detect(base::tolower(label), "depr|amort") ~ "PPE",
-      TRUE ~ "NCOA"
+      TRUE ~ "ONCOA"
     )
   } else if (section == "CL") {
     id <- dplyr::case_when(
@@ -79,29 +79,28 @@ classify_fs_labels <- function(label, section){
       stringr::str_detect(base::tolower(label), "payable") ~ "AP",
       stringr::str_detect(base::tolower(label), "liabil|warrant|accrued|expense|cost") ~ "OAL",
       stringr::str_detect(base::tolower(label), "advance|sale") ~ "UDR",
-      stringr::str_detect(base::tolower(label), "borrow") ~ "CFL",
-      stringr::str_detect(base::tolower(label), "financial") ~ "CFL",
-      stringr::str_detect(base::tolower(label), "credit") ~ "CFL",
-      stringr::str_detect(base::tolower(label), "controllling") ~ "CFL",
-      stringr::str_detect(base::tolower(label), "loyalty") ~ "COL",
-      stringr::str_detect(base::tolower(label), "deferred") ~ "COL",
-      stringr::str_detect(base::tolower(label), "accrued") ~ "COL",
-      stringr::str_detect(base::tolower(label), "accrual") ~ "COL",
-      stringr::str_detect(base::tolower(label), "obligation") ~ "CFL",
-      stringr::str_detect(base::tolower(label), "marketing|selling") ~ "COL",
-      stringr::str_detect(base::tolower(label), "parties") ~ "COL",
-      stringr::str_detect(base::tolower(label), "client") ~ "COL",
-      stringr::str_detect(base::tolower(label), "benefit|compensation|incentive") ~ "COL",
-      stringr::str_detect(base::tolower(label), "government") ~ "COL",
-      stringr::str_detect(base::tolower(label), "derivative") ~ "COL",
-      stringr::str_detect(base::tolower(label), "revenue") ~ "COL",
-      stringr::str_detect(base::tolower(label), "manager") ~ "COL",
-      stringr::str_detect(base::tolower(label), "insurance") ~ "COL",
-      stringr::str_detect(base::tolower(label), "trade") ~ "COL",
-      stringr::str_detect(base::tolower(label), "liabilit") ~ "COL",
-      stringr::str_detect(base::tolower(label), "other") ~ "COL",
-      
-      TRUE ~ "CFL"
+      stringr::str_detect(base::tolower(label), "borrow") ~ "STD",
+      stringr::str_detect(base::tolower(label), "financial") ~ "STD",
+      stringr::str_detect(base::tolower(label), "credit") ~ "STD",
+      stringr::str_detect(base::tolower(label), "controllling") ~ "OCFL",
+      stringr::str_detect(base::tolower(label), "loyalty") ~ "UDR",
+      stringr::str_detect(base::tolower(label), "deferred") ~ "UDR",
+      stringr::str_detect(base::tolower(label), "accrued") ~ "OAL",
+      stringr::str_detect(base::tolower(label), "accrual") ~ "OAL",
+      stringr::str_detect(base::tolower(label), "obligation") ~ "OCFL",
+      stringr::str_detect(base::tolower(label), "marketing|selling") ~ "OAL",
+      stringr::str_detect(base::tolower(label), "parties") ~ "OCOL",
+      stringr::str_detect(base::tolower(label), "client") ~ "UDR",
+      stringr::str_detect(base::tolower(label), "benefit|compensation|incentive") ~ "ESP",
+      stringr::str_detect(base::tolower(label), "government") ~ "OCOL",
+      stringr::str_detect(base::tolower(label), "derivative") ~ "OCOL",
+      stringr::str_detect(base::tolower(label), "revenue") ~ "UDR",
+      stringr::str_detect(base::tolower(label), "manager") ~ "ESP",
+      stringr::str_detect(base::tolower(label), "insurance") ~ "OCOL",
+      stringr::str_detect(base::tolower(label), "trade") ~ "OCOL",
+      stringr::str_detect(base::tolower(label), "liabilit") ~ "OCOL",
+      stringr::str_detect(base::tolower(label), "other") ~ "OCOL",
+      TRUE ~ "OCFL"
     )
   } else if (section == "NCL") {
     id <- dplyr::case_when(
@@ -115,29 +114,29 @@ classify_fs_labels <- function(label, section){
       stringr::str_detect(base::tolower(label), "tax") ~ "NCTP",
       stringr::str_detect(base::tolower(label), "employ|pension|retire") ~ "PL",
       stringr::str_detect(base::tolower(label), "debt|loan|borrow|note") ~ "LTD",
-      stringr::str_detect(base::tolower(label), "borrow") ~ "NCFL",
-      stringr::str_detect(base::tolower(label), "financial") ~ "NCFL",
-      stringr::str_detect(base::tolower(label), "credit") ~ "NCFL",
-      stringr::str_detect(base::tolower(label), "controllling") ~ "NCFL",
-      stringr::str_detect(base::tolower(label), "payable") ~ "NCOL",
-      stringr::str_detect(base::tolower(label), "loyalty") ~ "NCOL",
-      stringr::str_detect(base::tolower(label), "deferred") ~ "NCOL",
-      stringr::str_detect(base::tolower(label), "accrued") ~ "NCOL",
-      stringr::str_detect(base::tolower(label), "accrual") ~ "NCOL",
-      stringr::str_detect(base::tolower(label), "obligation") ~ "NCFL",
-      stringr::str_detect(base::tolower(label), "marketing|selling") ~ "NCOL",
-      stringr::str_detect(base::tolower(label), "parties") ~ "NCOL",
-      stringr::str_detect(base::tolower(label), "client") ~ "NCOL",
-      stringr::str_detect(base::tolower(label), "benefit|compensation|incentive") ~ "NCOL",
-      stringr::str_detect(base::tolower(label), "government") ~ "NCOL",
-      stringr::str_detect(base::tolower(label), "derivative") ~ "NCOL",
-      stringr::str_detect(base::tolower(label), "revenue") ~ "NCOL",
-      stringr::str_detect(base::tolower(label), "manager") ~ "NCOL",
-      stringr::str_detect(base::tolower(label), "insurance") ~ "NCOL",
-      stringr::str_detect(base::tolower(label), "trade") ~ "NCOL",
-      stringr::str_detect(base::tolower(label), "liabilit") ~ "NCOL",
-      stringr::str_detect(base::tolower(label), "other") ~ "NCOL",
-      TRUE ~ "NCFL"
+      stringr::str_detect(base::tolower(label), "borrow") ~ "LTD",
+      stringr::str_detect(base::tolower(label), "financial") ~ "ONCFL",
+      stringr::str_detect(base::tolower(label), "credit") ~ "LTD",
+      stringr::str_detect(base::tolower(label), "controllling") ~ "ONCFL",
+      stringr::str_detect(base::tolower(label), "payable") ~ "ONCOL",
+      stringr::str_detect(base::tolower(label), "loyalty") ~ "ONCOL",
+      stringr::str_detect(base::tolower(label), "deferred") ~ "ONCOL",
+      stringr::str_detect(base::tolower(label), "accrued") ~ "ONCOL",
+      stringr::str_detect(base::tolower(label), "accrual") ~ "ONCOL",
+      stringr::str_detect(base::tolower(label), "obligation") ~ "ONCFL",
+      stringr::str_detect(base::tolower(label), "marketing|selling") ~ "ONCOL",
+      stringr::str_detect(base::tolower(label), "parties") ~ "ONCOL",
+      stringr::str_detect(base::tolower(label), "client") ~ "ONCOL",
+      stringr::str_detect(base::tolower(label), "benefit|compensation|incentive") ~ "ONCOL",
+      stringr::str_detect(base::tolower(label), "government") ~ "ONCOL",
+      stringr::str_detect(base::tolower(label), "derivative") ~ "ONCOL",
+      stringr::str_detect(base::tolower(label), "revenue") ~ "ONCOL",
+      stringr::str_detect(base::tolower(label), "manager") ~ "ONCOL",
+      stringr::str_detect(base::tolower(label), "insurance") ~ "ONCOL",
+      stringr::str_detect(base::tolower(label), "trade") ~ "ONCOL",
+      stringr::str_detect(base::tolower(label), "liabilit") ~ "ONCOL",
+      stringr::str_detect(base::tolower(label), "other") ~ "ONCOL",
+      TRUE ~ "ONCFL"
     )
   } else if (section == "SE") {
     id <- dplyr::case_when(
@@ -158,7 +157,7 @@ classify_fs_labels <- function(label, section){
       stringr::str_detect(base::tolower(label), "control|minority") ~ "NCI",
       stringr::str_detect(base::tolower(label), "share|stock") ~ "COMSTK",
       stringr::str_detect(base::tolower(label), "earning") ~ "RE",
-      TRUE ~ "SE"
+      TRUE ~ "OTHEQ"
     )
   } else if (section == "REV") {
     id <- "REV"
@@ -181,7 +180,7 @@ classify_fs_labels <- function(label, section){
       stringr::str_detect(base::tolower(label), "impai") ~ "IMPAIR",
       stringr::str_detect(base::tolower(label), "interest") ~ "FINGAIN",
       stringr::str_detect(base::tolower(label), "tax") ~ "TAXGAIN",
-      TRUE ~ "NOGL"
+      TRUE ~ "ONOGL"
     )
   } else if (section == "INT") {
     id <- "INT"
@@ -221,7 +220,7 @@ classify_fs_labels <- function(label, section){
       stringr::str_detect(base::tolower(label), "(?=.*long)(?=.*term)(?=.*liab)") ~ "CHG.NCOL",
       stringr::str_detect(base::tolower(label), "liabil|expense|charge|pension|retire|") ~ "CHG.COL",
       stringr::str_detect(base::tolower(label), "stock") ~ "CNCL.NOGL",
-      TRUE ~ "RECON_NICFO"
+      TRUE ~ "OCFOA"
     )
   } else if (section == "CFIA") {
     id <- dplyr::case_when(
@@ -235,11 +234,11 @@ classify_fs_labels <- function(label, section){
       stringr::str_detect(base::tolower(label), "propert|plant|equip") ~ "NET.CHG.PPE",
       stringr::str_detect(base::tolower(label), "dispos|sale") ~ "NET.CHG.PPE",
       stringr::str_detect(base::tolower(label), "LAND") ~ "NET.CHG.LAND",
-      TRUE ~ "CFIA"
+      TRUE ~ "OCFIA"
     )
   } else if (section == "CFFA") {
     id <- dplyr::case_when(
-      stringr::str_detect(base::tolower(label), "employee|option|award|compens") ~ "CFFA",
+      stringr::str_detect(base::tolower(label), "employee|option|award|compens") ~ "OCFFA",
       stringr::str_detect(base::tolower(label), "dividend") ~ "PAIDIV",
       stringr::str_detect(base::tolower(label), "leas") ~ "CHG.FLL",
       stringr::str_detect(base::tolower(label), "credit") ~ "CHG.STD",
@@ -254,10 +253,16 @@ classify_fs_labels <- function(label, section){
       stringr::str_detect(base::tolower(label), "borrow|reimb|repay|debt") ~ "CHG.LTD",
       stringr::str_detect(base::tolower(label), "share|stock") ~ "CHG.PIC",
       stringr::str_detect(base::tolower(label), "control|minority") ~ "CHG.NCI",
-      TRUE ~ "CFFA"
+      TRUE ~ "OCFFA"
     )
   } else if (section == "OCF") {
-    id <- "OCF"
+    id <- dplyr::case_when(
+      stringr::str_detect(base::tolower(label), "foreign") ~ "EOER",
+      stringr::str_detect(base::tolower(label), "exchange") ~ "EOER",
+      stringr::str_detect(base::tolower(label), "currency") ~ "EOER",
+      stringr::str_detect(base::tolower(label), "forex") ~ "EOER",
+      TRUE ~ "OCFC"
+    )
   } else if (section == "ADDINFO"){
     id <- dplyr::case_when(
       stringr::str_detect(base::tolower(label), "(?=.*interest)(?=.*[pay|pai])") ~ "PAIDINT",

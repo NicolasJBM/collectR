@@ -11,6 +11,7 @@
 #' @importFrom dplyr mutate_all
 #' @importFrom dplyr select
 #' @importFrom jsonlite fromJSON
+#' @importFrom stringr str_extract
 #' @importFrom stringr str_remove
 #' @importFrom stringr str_remove_all
 #' @export
@@ -24,11 +25,11 @@ flatten_submission <- function(json_file){
   filingDate <- NULL
   reportDate <- NULL
   link <- NULL
+  acceptanceDateTime <- NULL
   
   submissions <- jsonlite::fromJSON(json_file, flatten=TRUE)
   cik <- json_file |>
-    stringr::str_remove_all("^data/json/") |>
-    stringr::str_remove_all(".json$")
+    stringr::str_extract(pattern = "CIK[0-9]{10}")
   
   submissions$filings$recent |>
     base::as.data.frame() |>
@@ -42,7 +43,7 @@ flatten_submission <- function(json_file){
       )
     ) |>
     dplyr::filter(form == "10-K") |>
-    dplyr::select(cik, form, filingDate, reportDate, link) |>
+    dplyr::select(cik, form, filingDate, acceptedDate = acceptanceDateTime, reportDate, link) |>
     dplyr::arrange(cik, form, dplyr::desc(reportDate)) |>
     dplyr::mutate_all(base::as.character) |>
     base::as.data.frame()
