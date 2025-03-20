@@ -30,7 +30,7 @@ classify_fs_labels <- function(label, section){
       stringr::str_detect(base::tolower(label), "prepaid|defer|advance") ~ "PDE",
       stringr::str_detect(base::tolower(label), "customer|receivable") ~ "AR",
       stringr::str_detect(base::tolower(label), "invest|market|treasur|note|financ|discontin") ~ "CIA",
-      stringr::str_detect(base::tolower(label), "other") ~ "COA",
+      stringr::str_detect(base::tolower(label), "other") ~ "OCOA",
       TRUE ~ "OCOA"
     )
   } else if (section == "NCA") {
